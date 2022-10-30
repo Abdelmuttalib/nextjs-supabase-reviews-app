@@ -11,7 +11,7 @@ git clone git@github.com:Abdelmuttalib/nextjs-supabase-reviews-app.git
 cd into the project directory:
 ```
 cd nextjs-supabase-reviews-app
-```bash
+```
 run the development server:
 
 ```bash
