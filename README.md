@@ -1,5 +1,6 @@
 
 # nextjs-supabase-reviews-app
+![Screenshot from 2022-11-01 21-39-50](https://user-images.githubusercontent.com/54845047/199247176-b8590cea-de89-4cfe-a0fe-bca5a7237df8.png)
 
 
 ## Getting Started
