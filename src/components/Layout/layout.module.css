@@ -1,6 +1,21 @@
 .container {
   padding: 0 2rem;
 }
+@media screen and (min-width: 640px) {
+  .container {
+    padding: 0 4rem;
+  }
+}
+@media screen and (min-width: 768px) {
+  .container {
+    padding: 0 6rem;
+  }
+}
+@media screen and (min-width: 980px) {
+  .container {
+    padding: 0 10rem;
+  }
+}
 
 .main {
   min-height: 100vh;
@@ -17,6 +32,43 @@
   flex: 1;
   padding: 0.5rem 0;
   align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+}
+
+.navLinks {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.link {
+  color: white;
+  text-decoration: none;
+  height: fit-content;
+}
+
+.activeLink {
+  color: #0070f3;
+}
+
+.header .link:hover {
+  text-decoration: underline;
+  text-decoration-color: #0070f3;
+}
+
+.header .authButton {
+  background-color: #0070f3;
+  color: white;
+  outline: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: medium;
+  display: inline;
 }
 
 .footer {

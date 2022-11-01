@@ -1,5 +1,7 @@
 import Head from "next/head";
+import Link from "next/link";
 import { Layout, Auth } from "../src/components";
+import styles from "../src/components/Layout/layout.module.css";
 
 export default function Home() {
   return (
@@ -11,7 +13,12 @@ export default function Home() {
       </Head>
 
       <Layout>
-        <Auth />
+        <Link href="/auth" className={styles.link}>
+          <h2>Sign in or Sign up Page</h2>
+        </Link>
+        <Link href="/profile" className={styles.link}>
+          <h2>Profile Page</h2>
+        </Link>
       </Layout>
     </>
   );
