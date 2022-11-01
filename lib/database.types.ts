@@ -17,6 +17,7 @@ export interface Database {
           full_name: string | null
           avatar_url: string | null
           website: string | null
+          bio: string | null
         }
         Insert: {
           id: string
@@ -25,6 +26,7 @@ export interface Database {
           full_name?: string | null
           avatar_url?: string | null
           website?: string | null
+          bio?: string | null
         }
         Update: {
           id?: string
@@ -33,6 +35,33 @@ export interface Database {
           full_name?: string | null
           avatar_url?: string | null
           website?: string | null
+          bio?: string | null
+        }
+      }
+      "user-images": {
+        Row: {
+          created_at: string | null
+          imageSrc: string | null
+          is_public: boolean | null
+          user_id: string | null
+          id: string
+          description: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          imageSrc?: string | null
+          is_public?: boolean | null
+          user_id?: string | null
+          id?: string
+          description?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          imageSrc?: string | null
+          is_public?: boolean | null
+          user_id?: string | null
+          id?: string
+          description?: string | null
         }
       }
     }

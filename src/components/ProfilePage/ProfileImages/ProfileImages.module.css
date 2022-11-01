@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1330px;
+}
+
+@media screen and (min-width: 1560px) {
+  .container {
+    flex-direction: row;
+    gap: 5rem;
+  }
+}
+
+.sections-container {
+  display: flex;
+  margin-top: 0.7rem;
+}
+
+.image {
+  object-fit: cover;
+  border-radius: 5px;
+}

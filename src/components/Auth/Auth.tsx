@@ -1,38 +1,65 @@
 import { useState, useEffect } from "react";
 import { useUser, useSessionContext } from "@supabase/auth-helpers-react";
+import { SignIn } from "./SignIn";
+import { SignUp } from "./SignUp";
+import styles from "./Auth.module.css";
 
 type Props = {};
 
 const Auth = (props: Props) => {
   const { isLoading, session, error, supabaseClient } = useSessionContext();
   const user = useUser();
-  const [data, setData] = useState();
+  const [authType, setAuthType] = useState<"sign-in" | "sign-up">("sign-in");
 
-  useEffect(() => {
-    console.log("user: ", user);
-    async function loadData() {
-      const { data } = await supabaseClient.from("profiles").select("*");
-      setData(data);
-    }
-    // Only run query once user is logged in.
-    if (user) loadData();
-  }, [user]);
   return (
     <div>
-      {" "}
       {!user ? (
         <>
-          <SignUp supabaseClient={supabaseClient} />
-          <SignIn supabaseClient={supabaseClient} />
+          {authType === "sign-in" && (
+            <>
+              <SignIn />
+              <p style={{ color: "#4f4f4f" }}>
+                Don&apos;t have an account?{" "}
+                <span
+                  style={{
+                    color: "#0070f3",
+                    cursor: "pointer",
+                    fontWeight: "500",
+                  }}
+                  onClick={() => setAuthType("sign-up")}
+                >
+                  Sign Up
+                </span>
+              </p>
+            </>
+          )}
+          {authType === "sign-up" && (
+            <>
+              <SignUp />
+              <p style={{ color: "#4f4f4f" }}>
+                Already have an account?{" "}
+                <span
+                  style={{
+                    color: "#0070f3",
+                    cursor: "pointer",
+                    fontWeight: "500",
+                  }}
+                  onClick={() => setAuthType("sign-in")}
+                >
+                  Sign In
+                </span>
+              </p>
+            </>
+          )}
         </>
       ) : (
         <>
           <p>{user.email}</p>
           <button
-            onClick={() => {
-              console.log("signing out");
-              supabaseClient.auth.signOut();
+            onClick={async () => {
+              await supabaseClient.auth.signOut();
             }}
+            className={styles.button}
           >
             Sign Out
           </button>
@@ -43,61 +70,3 @@ const Auth = (props: Props) => {
 };
 
 export default Auth;
-
-const SignUp = ({ supabaseClient }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(email, password);
-
-    const { data, error } = await supabaseClient.auth.signUp({
-      email: email,
-      password: password,
-    });
-
-    console.log(data);
-    console.log(error);
-  };
-
-  return (
-    <div>
-      Sign up:
-      <form onSubmit={handleSubmit}>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input value={password} onChange={(e) => setPassword(e.target.value)} />
-        <input type="submit" value="submit" />
-      </form>
-    </div>
-  );
-};
-
-const SignIn = ({ supabaseClient }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(email, password);
-
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-
-    console.log(data);
-    console.log(error);
-  };
-
-  return (
-    <div>
-      Sign in:
-      <form onSubmit={handleSubmit}>
-        <input value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input value={password} onChange={(e) => setPassword(e.target.value)} />
-        <input type="submit" value="submit" />
-      </form>
-    </div>
-  );
-};

@@ -1,11 +1,63 @@
 import Image from "next/image";
+import Link from "next/link";
 import { ReactNode } from "react";
+import { useRouter } from "next/router";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import styles from "./layout.module.css";
+import cn from "classnames";
 
 const Header = () => {
+  const user = useUser();
+  const supabaseClient = useSupabaseClient();
+  const { pathname } = useRouter();
+  const links = [
+    {
+      href: "/",
+      label: "Home",
+    },
+    {
+      href: "/profile",
+      label: "Profile",
+    },
+  ];
+
   return (
     <header className={styles.header}>
-      <h4>Next App</h4>
+      <Link href="/">
+        <h4>Next App</h4>
+      </Link>
+
+      <nav className={styles.navLinks}>
+        {links.map(({ href, label }) => (
+          <Link
+            key={href}
+            href={href}
+            className={cn(styles.link, {
+              [styles.activeLink]: pathname === `${href}`,
+            })}
+          >
+            {label}
+          </Link>
+        ))}
+
+        {/* Sign In  */}
+        {!user && (
+          <Link href="/auth" className={styles.authButton}>
+            Sign In
+          </Link>
+        )}
+
+        {/* Sign Out */}
+        {user && (
+          <button
+            type="button"
+            className={styles.authButton}
+            onClick={async () => await supabaseClient.auth.signOut()}
+          >
+            Sign Out
+          </button>
+        )}
+      </nav>
     </header>
   );
 };

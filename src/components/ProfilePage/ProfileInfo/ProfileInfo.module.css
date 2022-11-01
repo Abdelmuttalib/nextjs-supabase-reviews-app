@@ -1,0 +1,12 @@
+.profileInfoContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media screen and (min-width: 1560px) {
+  .profileInfoContainer {
+    flex-direction: row;
+    gap: 5rem;
+  }
+}
