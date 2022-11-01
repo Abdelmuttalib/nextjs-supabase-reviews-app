@@ -98,8 +98,6 @@ const UploadNewImageForm = () => {
   // const onUploadImage = async (imageUploadData) => {};
 
   const onUploadImageSubmit = async (data: UploadImageFieldsT) => {
-    // formD
-    console.log("data:", data);
     const {
       imageFile: imageFiles,
       description,

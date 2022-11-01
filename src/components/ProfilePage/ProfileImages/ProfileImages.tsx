@@ -25,7 +25,6 @@ const ProfileImages = () => {
         throw new Error(error.message);
       }
 
-      console.log("images: ", images);
       setImages(images);
       setLoading(false);
     };

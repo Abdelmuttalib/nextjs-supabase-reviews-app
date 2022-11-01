@@ -23,9 +23,6 @@ const SignUp = () => {
       email: email,
       password: password,
     });
-
-    console.log(signUpData);
-    console.log(error);
   };
 
   return (

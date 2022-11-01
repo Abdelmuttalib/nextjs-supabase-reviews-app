@@ -56,9 +56,8 @@ const Auth = (props: Props) => {
         <>
           <p>{user.email}</p>
           <button
-            onClick={() => {
-              console.log("signing out");
-              supabaseClient.auth.signOut();
+            onClick={async () => {
+              await supabaseClient.auth.signOut();
             }}
             className={styles.button}
           >

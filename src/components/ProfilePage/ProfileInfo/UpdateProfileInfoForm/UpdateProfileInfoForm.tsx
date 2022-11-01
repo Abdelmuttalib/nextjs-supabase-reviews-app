@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styles from "./UpdateProfileInfoForm.module.css";
+import { toast } from "react-toastify";
 import { Database } from "../../../../../lib/database.types";
 
 type Profiles = Database["public"]["Tables"]["profiles"]["Row"];
@@ -21,7 +22,6 @@ type Props = {
 };
 
 const UpdateProfileForm = ({ profileData }: Props) => {
-  console.log(profileData.username);
   const { full_name, username, bio } = profileData;
   const supabaseClient = useSupabaseClient<Database>();
   const user = useUser();
@@ -47,8 +47,7 @@ const UpdateProfileForm = ({ profileData }: Props) => {
         alert("Profile updated!");
       })
       .catch((error) => {
-        alert("Error updating the data!");
-        console.log(error);
+        toast.error("Error updating the data!");
       })
       .finally(() => setLoading(false));
   };

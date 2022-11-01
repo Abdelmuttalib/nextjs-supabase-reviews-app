@@ -24,9 +24,6 @@ const SignIn = () => {
         email: email,
         password: password,
       });
-
-    console.log(signInData);
-    console.log(error);
   };
 
   return (

@@ -36,7 +36,7 @@ const ProfileInfo = () => {
             setProfileData(data);
           }
         })
-        .catch((error) => console.log("error: ", error))
+        .catch((error) => {})
         .finally(() => setLoading(false));
     }
   };
