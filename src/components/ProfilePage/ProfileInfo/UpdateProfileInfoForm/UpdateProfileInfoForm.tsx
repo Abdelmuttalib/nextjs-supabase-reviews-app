@@ -44,10 +44,14 @@ const UpdateProfileForm = ({ profileData }: Props) => {
           throw error;
         }
 
-        alert("Profile updated!");
+        toast.success("Profile successfully updated!", {
+          hideProgressBar: true,
+        });
       })
       .catch((error) => {
-        toast.error("Error updating the data!");
+        toast.error("Error updating the data!", {
+          hideProgressBar: true,
+        });
       })
       .finally(() => setLoading(false));
   };

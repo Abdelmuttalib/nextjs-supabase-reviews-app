@@ -1,3 +1,4 @@
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import Head from "next/head";
 import React from "react";
 import { Layout } from "../../src/components";
@@ -28,3 +29,4 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+export const getServerSideProps = withPageAuth({ redirectTo: "/auth" });

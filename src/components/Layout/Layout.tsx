@@ -16,6 +16,10 @@ const Header = () => {
       label: "Home",
     },
     {
+      href: "/peer-review",
+      label: "Peers Review",
+    },
+    {
       href: "/profile",
       label: "Profile",
     },
