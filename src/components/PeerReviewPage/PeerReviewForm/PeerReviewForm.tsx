@@ -3,7 +3,7 @@ import {
   useSupabaseClient,
   useUser,
 } from "@supabase/auth-helpers-react";
-import { Database } from "home/abdelmuttalib/Dev/nextjs-supabase-reviews/lib/database.types";
+import { Database } from "../../../../lib/database.types";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -40,9 +40,7 @@ const PeerReviewForm = ({ selectedProfile }: Props) => {
     },
   });
 
-  const onReview = async (data) => {
-    console.log(data);
-
+  const onReview = async (data: any) => {
     const { data: newReviewData, error } = await supabaseClient
       .from("peers-reviews")
       .insert({
@@ -52,7 +50,10 @@ const PeerReviewForm = ({ selectedProfile }: Props) => {
 
     if (error) toast.error("Error while submitting review");
 
-    reset();
+    if (!error) {
+      reset();
+      toast.success("Review submitted successfully");
+    }
   };
 
   return (

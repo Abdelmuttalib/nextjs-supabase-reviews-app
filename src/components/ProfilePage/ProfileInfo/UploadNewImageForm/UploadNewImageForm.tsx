@@ -123,10 +123,6 @@ const UploadNewImageForm = () => {
 
     const reader = new FileReader();
 
-    let compressImage = true;
-    let imageFile;
-    compressImage ? (imageFile = compressedFile) : (imageFile = inputImage);
-
     const getImageFileBasedOnCompressOption = async () => {
       if (compressImageForm === "compressImageOnClient") {
         const compressedFile = imageCompression(inputImage, {
@@ -138,7 +134,12 @@ const UploadNewImageForm = () => {
       } else if (compressImageForm === "compressImageOnServer") {
         await fetch("/api/compress-image", {
           method: "POST",
-          body: JSON.stringify({ image: inputImage }),
+          body: JSON.stringify({
+            image: inputImage,
+            userId: user?.id,
+            description: description,
+            is_public: is_public,
+          }),
         }).then((response) => response.json());
         return inputImage;
       } else if (compressImageForm === "noCompression") {
@@ -146,7 +147,13 @@ const UploadNewImageForm = () => {
       }
     };
 
-    await reader.readAsDataURL(getImageFileBasedOnCompressOption());
+    const compressedImage = await imageCompression(inputImage, {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    });
+
+    reader.readAsDataURL(compressedImage);
 
     reader.onload = async (e) => {
       const image = e.target?.result as string;
@@ -269,7 +276,7 @@ const UploadNewImageForm = () => {
               disabled={uploading}
               className={styles.checkbox}
             />
-            Compress image on server side (supabase functions)
+            Compress image on server side
           </label>
           <label htmlFor="noCompression">
             <input
