@@ -1,0 +1,52 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  border: 3px solid #212121;
+  padding: 3rem 4rem;
+  border-radius: 0.5rem;
+  margin-bottom: 10rem;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  margin-bottom: 0.1rem;
+}
+
+.input {
+  padding: 0.7rem 1rem;
+  font-size: medium;
+  border-radius: 5px;
+  outline: none;
+  border: 2px solid transparent;
+}
+.input-error {
+  border: 1px solid red;
+}
+
+.input:focus {
+  border: 2px solid #454545;
+}
+
+.input-error-message {
+  margin-top: 0.2rem;
+  font-size: small;
+  color: red;
+}
+
+.button {
+  background-color: #0070f3;
+  color: white;
+  outline: none;
+  border: none;
+  padding: 0.7rem 2rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: medium;
+  display: inline;
+  margin-top: 2rem;
+}

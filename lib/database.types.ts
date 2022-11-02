@@ -9,6 +9,26 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      "peers-reviews": {
+        Row: {
+          id: number
+          created_at: string | null
+          review: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          id?: number
+          created_at?: string | null
+          review?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          id?: number
+          created_at?: string | null
+          review?: Json | null
+          user_id?: string | null
+        }
+      }
       profiles: {
         Row: {
           id: string

@@ -16,6 +16,18 @@ const Header = () => {
       label: "Home",
     },
     {
+      href: "/peer-review",
+      label: "Peers Review",
+    },
+    {
+      href: "/public-images",
+      label: "Public Images",
+    },
+    {
+      href: "/keyword-analysis",
+      label: "Keyword analysis",
+    },
+    {
       href: "/profile",
       label: "Profile",
     },

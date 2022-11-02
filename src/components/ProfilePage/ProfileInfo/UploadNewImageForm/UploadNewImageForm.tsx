@@ -13,8 +13,7 @@ import Image from "next/image";
 type UploadImageFieldsT = {
   imageFile: File[] | undefined;
   description: string;
-  compressImageOnClient: boolean;
-  compressImageOnServer: boolean;
+  compressImage: string;
   is_public: boolean;
 };
 
@@ -98,11 +97,13 @@ const UploadNewImageForm = () => {
   // const onUploadImage = async (imageUploadData) => {};
 
   const onUploadImageSubmit = async (data: UploadImageFieldsT) => {
+    console.log(data);
     const {
       imageFile: imageFiles,
       description,
-      compressImageOnClient,
-      compressImageOnServer,
+      // compressImageOnClient,
+      // compressImageOnServer,
+      compressImage: compressImageForm,
       is_public,
     } = data;
 
@@ -122,11 +123,37 @@ const UploadNewImageForm = () => {
 
     const reader = new FileReader();
 
-    let compressImage = true;
-    let imageFile;
-    compressImage ? (imageFile = compressedFile) : (imageFile = inputImage);
+    const getImageFileBasedOnCompressOption = async () => {
+      if (compressImageForm === "compressImageOnClient") {
+        const compressedFile = imageCompression(inputImage, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+        });
+        return compressedFile;
+      } else if (compressImageForm === "compressImageOnServer") {
+        await fetch("/api/compress-image", {
+          method: "POST",
+          body: JSON.stringify({
+            image: inputImage,
+            userId: user?.id,
+            description: description,
+            is_public: is_public,
+          }),
+        }).then((response) => response.json());
+        return inputImage;
+      } else if (compressImageForm === "noCompression") {
+        return inputImage;
+      }
+    };
 
-    reader.readAsDataURL(imageFile);
+    const compressedImage = await imageCompression(inputImage, {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    });
+
+    reader.readAsDataURL(compressedImage);
 
     reader.onload = async (e) => {
       const image = e.target?.result as string;
@@ -229,11 +256,12 @@ const UploadNewImageForm = () => {
           )}
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <label htmlFor="compressImage">
+          <label htmlFor="compressImageOnClient">
             <input
-              id="compressImage"
-              type="checkbox"
-              {...register("compressImageOnClient")}
+              id="compressImageOnClient"
+              type="radio"
+              {...register("compressImage", { required: true })}
+              value="compressImageOnClient"
               disabled={uploading}
               className={styles.checkbox}
             />
@@ -242,12 +270,24 @@ const UploadNewImageForm = () => {
           <label htmlFor="compressImageOnServer">
             <input
               id="compressImageOnServer"
-              type="checkbox"
-              {...register("compressImageOnServer")}
+              type="radio"
+              {...register("compressImage")}
+              value="compressImageOnServer"
               disabled={uploading}
               className={styles.checkbox}
             />
             Compress image on server side
+          </label>
+          <label htmlFor="noCompression">
+            <input
+              id="noCompression"
+              type="radio"
+              {...register("compressImage")}
+              value="noCompression"
+              disabled={uploading}
+              className={styles.checkbox}
+            />
+            No Compression
           </label>
           <label htmlFor="makeImagePublic">
             <input
@@ -260,6 +300,9 @@ const UploadNewImageForm = () => {
             Make Image Public
           </label>
         </div>
+        {errors.compressImage && (
+          <p style={{ color: "red" }}>* kindly select a compression type</p>
+        )}
 
         <button type="submit" className={styles.button} disabled={uploading}>
           {uploading ? "Uploading..." : "Upload"}
