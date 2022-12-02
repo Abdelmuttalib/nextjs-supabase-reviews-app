@@ -16,7 +16,6 @@ const ProfileInfo = () => {
   const session = useSession();
   const user = useUser();
   const [profileData, setProfileData] = useState<Profiles>();
-  const [profilesData, setProfilesData] = useState<Profiles[]>();
   const [loading, setLoading] = useState(user ? true : false);
 
   const queryProfileData = async () =>
@@ -42,34 +41,10 @@ const ProfileInfo = () => {
     }
   };
 
-  const queryProfilsData = async () =>
-    await supabaseClient.from("profiles").select("*");
-
-  const getProfiles = () => {
-    if (user) {
-      queryProfilsData()
-        .then(({ data, error, status }) => {
-          if (error && status !== 406) {
-            throw error;
-          }
-          if (data) {
-            setProfilesData(data);
-          }
-        })
-        .catch((error) => {})
-        .finally(() => setLoading(false));
-    }
-  };
-
   useEffect(() => {
     getProfile();
-    getProfiles();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
-
-  useEffect(() => {
-    console.log("all: ", profilesData);
-  }, [profilesData]);
 
   const getMainProfileInfoData = () => {
     if (profileData) {

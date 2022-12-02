@@ -60,7 +60,6 @@ const UploadNewImageForm = () => {
       throw new Error(error.message);
     }
 
-    // set
     reset();
     setInputImagePreviewUrl(null);
     setUploading(false);
@@ -96,8 +95,10 @@ const UploadNewImageForm = () => {
 
   // const onUploadImage = async (imageUploadData) => {};
 
-  const onUploadImageSubmit = async (data: UploadImageFieldsT) => {
-    console.log(data);
+  const onUploadAndCompressOnClient = async (
+    data: UploadImageFieldsT,
+    compress: boolean
+  ) => {
     const {
       imageFile: imageFiles,
       description,
@@ -108,44 +109,10 @@ const UploadNewImageForm = () => {
     } = data;
 
     const inputImage = imageFiles && imageFiles[0];
+
     if (!inputImage) {
-      toast("You must select an image to upload", "error");
       return;
     }
-
-    setUploading(true);
-
-    const compressedFile = await imageCompression(inputImage, {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-    });
-
-    const reader = new FileReader();
-
-    const getImageFileBasedOnCompressOption = async () => {
-      if (compressImageForm === "compressImageOnClient") {
-        const compressedFile = imageCompression(inputImage, {
-          maxSizeMB: 1,
-          maxWidthOrHeight: 1920,
-          useWebWorker: true,
-        });
-        return compressedFile;
-      } else if (compressImageForm === "compressImageOnServer") {
-        await fetch("/api/compress-image", {
-          method: "POST",
-          body: JSON.stringify({
-            image: inputImage,
-            userId: user?.id,
-            description: description,
-            is_public: is_public,
-          }),
-        }).then((response) => response.json());
-        return inputImage;
-      } else if (compressImageForm === "noCompression") {
-        return inputImage;
-      }
-    };
 
     const compressedImage = await imageCompression(inputImage, {
       maxSizeMB: 1,
@@ -153,7 +120,9 @@ const UploadNewImageForm = () => {
       useWebWorker: true,
     });
 
-    reader.readAsDataURL(compressedImage);
+    const reader = new FileReader();
+
+    reader.readAsDataURL(compress ? compressedImage : inputImage);
 
     reader.onload = async (e) => {
       const image = e.target?.result as string;
@@ -178,6 +147,65 @@ const UploadNewImageForm = () => {
     };
   };
 
+  // Compress on Server
+  const onUploadAndCompressOnServer = async (data: UploadImageFieldsT) => {
+    const {
+      imageFile: imageFiles,
+      description,
+      compressImage: compressImageForm,
+      is_public,
+    } = data;
+    const inputImage = imageFiles && imageFiles[0];
+    console.log("FD: ", inputImage);
+
+    fetch("/api/compress-image", {
+      method: "POST",
+      body: JSON.stringify({
+        image: inputImage,
+        userId: user?.id,
+        description: description,
+        is_public: is_public,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          toast("Image Uploaded Successfully", "success");
+          reset();
+          setInputImagePreviewUrl(null);
+          setUploading(false);
+        }
+      })
+      .catch((error) => {
+        toast("Unable to upload image", "error");
+        setUploading(false);
+      });
+  };
+
+  const onUploadImageSubmit = async (data: UploadImageFieldsT) => {
+    console.log(data);
+    const {
+      imageFile: imageFiles,
+      description,
+      compressImage: compressImageForm,
+      is_public,
+    } = data;
+    const inputImage = imageFiles && imageFiles[0];
+    if (!inputImage) {
+      toast("You must select an image to upload", "error");
+      return;
+    }
+
+    setUploading(true);
+
+    if (compressImageForm === "compressImageOnClient") {
+      onUploadAndCompressOnClient(data, false);
+    } else if (compressImageForm === "compressImageOnServer") {
+      onUploadAndCompressOnServer(data);
+    } else if (compressImageForm === "noCompression") {
+      onUploadAndCompressOnClient(data, true);
+    }
+  };
+
   useEffect(() => {
     if (!imageFileValue) setInputImagePreviewUrl(null);
     if (imageFileValue && imageFileValue[0]) {
@@ -197,7 +225,7 @@ const UploadNewImageForm = () => {
             src={inputImagePreviewUrl}
             alt=""
             width={300}
-            height={220}
+            height={240}
             className={styles.image}
           />
           <button

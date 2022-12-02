@@ -74,7 +74,7 @@ const PeerReviewForm = ({ selectedProfile }: Props) => {
             }`}
             {...register("name", { required: true })}
             type="text"
-            placeholder="your name "
+            placeholder="comment "
           />
           {errors.name && (
             <p className={styles["input-error-message"]}>

@@ -15,7 +15,6 @@ const PeerReview = () => {
   const [loading, setLoading] = useState(user ? true : false);
   const [profilesData, setProfilesData] = useState<Profiles[]>();
   const supabaseClient = useSupabaseClient<Database>();
-  const [showReviewForm, setShowReviewForm] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState<Profiles>();
 
   const queryProfilsData = async () =>
@@ -41,7 +40,7 @@ const PeerReview = () => {
     getProfiles();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
-  
+
   return (
     <>
       <h1 style={{ textAlign: "center", marginBottom: "2rem" }}>Peer Review</h1>
@@ -69,6 +68,7 @@ const PeerReview = () => {
                 </button>
               </div>
             ))}
+          {loading && <div>Loading...</div>}
         </div>
         {selectedProfile && (
           <PeerReviewForm selectedProfile={selectedProfile} />

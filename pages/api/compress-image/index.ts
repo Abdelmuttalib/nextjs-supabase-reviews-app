@@ -15,62 +15,67 @@ type Data = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<Data | any>
 ) {
+  console.log("RE: ", req);
   if (req.method === "POST") {
-    const { image, userId, description, is_public } = req.body;
-    // const supabaseClient = useSupabaseClient<Database>();
-    const supabaseServerClient = createServerSupabaseClient<Database>({
-      req,
-      res,
-    });
-
-    const compressedFile = await imageCompression(image, {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-    });
-
-    const reader = new FileReader();
-
-    reader.readAsDataURL(compressedFile);
-
-    reader.onload = async (e) => {
-      const image = e.target?.result as string;
-
-      const imageContentType = image.match(/data:(.*);base64/)?.[1];
-      const base64FileData = image.split("base64,")?.[1];
-
-      if (!imageContentType || !base64FileData) {
-        throw new Error("Image data not valid");
-      }
-
-      const fileName = nanoid();
-      const ext = imageContentType?.split("/")[1];
-      const path = `${fileName}.${ext}`;
-
-      const decodedFileData = decode(base64FileData);
-      await supabaseServerClient.storage
-        .from("images")
-        .upload(path, decodedFileData, {
-          contentType: imageContentType,
-          upsert: true,
-        });
-
-      const { data: dataUrl } = await supabaseServerClient.storage
-        .from("images")
-        .getPublicUrl(path);
-
-      const { publicUrl: publicImageUrl } = dataUrl;
-
-      await supabaseServerClient.from("user-images").insert({
-        imageSrc: publicImageUrl,
-        description,
-        is_public,
-        user_id: userId,
+    try {
+      const { image, userId, description, is_public } = req.body;
+      // const supabaseClient = useSupabaseClient<Database>();
+      const supabaseServerClient = createServerSupabaseClient<Database>({
+        req,
+        res,
       });
-    };
 
-    res.status(200).json({ image, userId, description, is_public });
+      const compressedFile = await imageCompression(image, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+      });
+
+      const reader = new FileReader();
+
+      reader.readAsDataURL(compressedFile);
+
+      reader.onload = async (e) => {
+        const image = e.target?.result as string;
+
+        const imageContentType = image.match(/data:(.*);base64/)?.[1];
+        const base64FileData = image.split("base64,")?.[1];
+
+        if (!imageContentType || !base64FileData) {
+          throw new Error("Image data not valid");
+        }
+
+        const fileName = nanoid();
+        const ext = imageContentType?.split("/")[1];
+        const path = `${fileName}.${ext}`;
+
+        const decodedFileData = decode(base64FileData);
+        await supabaseServerClient.storage
+          .from("images")
+          .upload(path, decodedFileData, {
+            contentType: imageContentType,
+            upsert: true,
+          });
+
+        const { data: dataUrl } = await supabaseServerClient.storage
+          .from("images")
+          .getPublicUrl(path);
+
+        const { publicUrl: publicImageUrl } = dataUrl;
+
+        await supabaseServerClient.from("user-images").insert({
+          imageSrc: publicImageUrl,
+          description,
+          is_public,
+          user_id: userId,
+        });
+      };
+
+      res.status(200).json({ image, userId, description, is_public });
+    } catch (error) {
+      res.status(500).json({ error: "Something went wrong" });
+    }
   }
 }

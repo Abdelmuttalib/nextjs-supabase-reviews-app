@@ -51,6 +51,13 @@
   height: fit-content;
 }
 
+.home-page-link {
+  color: #0070f3;
+  text-decoration: none;
+  height: fit-content;
+  /* font-size: 5rem; */
+}
+
 .activeLink {
   color: #0070f3;
 }
@@ -74,6 +81,7 @@
 }
 
 .footer {
+  margin-top: 10rem;
   display: flex;
   flex: 1;
   padding: 2rem 0;

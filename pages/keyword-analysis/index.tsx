@@ -17,7 +17,7 @@ const KeywordAnalysisPage = () => {
             alignContent: "center",
           }}
         >
-          <h1>Keyword Analysis</h1>
+          <h1 style={{ fontSize: "5rem" }}>{`<Keyword Analysis />`}</h1>
         </div>
       </Layout>
     </>

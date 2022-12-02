@@ -30,12 +30,17 @@ const PublicImages = () => {
   }, []);
 
   return (
-    <div>
+    <div style={{ width: "70%" }}>
       <h1 style={{ marginBottom: "3rem", textAlign: "center" }}>
         Public Images
       </h1>
       <div
-        style={{ width: "80%", display: "flex", gap: "2rem", flexWrap: "wrap" }}
+        style={{
+          width: "100%",
+          display: "flex",
+          gap: "2rem",
+          flexWrap: "wrap",
+        }}
       >
         {images &&
           images.length > 0 &&
