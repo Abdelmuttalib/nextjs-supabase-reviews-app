@@ -58,6 +58,10 @@
   /* font-size: 5rem; */
 }
 
+.home-page-link:hover {
+  text-decoration: underline;
+}
+
 .activeLink {
   color: #0070f3;
 }

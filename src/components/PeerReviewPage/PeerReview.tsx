@@ -48,7 +48,13 @@ const PeerReview = () => {
         <div className={styles["peer-cards-container"]}>
           {profilesData &&
             profilesData.map((profile) => (
-              <div key={profile.id} className={styles["peer-card"]}>
+              <div
+                key={profile.id}
+                className={`${styles["peer-card"]} ${
+                  selectedProfile?.id === profile.id &&
+                  styles["peer-card-selected"]
+                }`}
+              >
                 <div className={styles["peer-card-content"]}>
                   <span className={styles["peer-profile-name"]}>
                     {profile.full_name}

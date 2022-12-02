@@ -74,7 +74,7 @@ const PeerReviewForm = ({ selectedProfile }: Props) => {
             }`}
             {...register("name", { required: true })}
             type="text"
-            placeholder="comment "
+            placeholder="your name"
           />
           {errors.name && (
             <p className={styles["input-error-message"]}>
@@ -106,7 +106,7 @@ const PeerReviewForm = ({ selectedProfile }: Props) => {
                     type="number"
                     value={value}
                     onChange={onChange}
-                    placeholder="your name "
+                    placeholder="score"
                   />
                   {errors.required_rating?.presentation_score?.score && (
                     <p className={styles["input-error-message"]}>
@@ -135,7 +135,7 @@ const PeerReviewForm = ({ selectedProfile }: Props) => {
                     type="text"
                     value={value}
                     onChange={onChange}
-                    placeholder="your name "
+                    placeholder="comment"
                   />
                   {errors.required_rating?.presentation_score?.comment && (
                     <p className={styles["input-error-message"]}>

@@ -197,10 +197,8 @@ const UploadNewImageForm = () => {
 
     setUploading(true);
 
-    if (compressImageForm === "compressImageOnClient") {
+    if (compressImageForm === "compressImage") {
       onUploadAndCompressOnClient(data, false);
-    } else if (compressImageForm === "compressImageOnServer") {
-      onUploadAndCompressOnServer(data);
     } else if (compressImageForm === "noCompression") {
       onUploadAndCompressOnClient(data, true);
     }
@@ -284,18 +282,18 @@ const UploadNewImageForm = () => {
           )}
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <label htmlFor="compressImageOnClient">
+          <label htmlFor="compressImage">
             <input
-              id="compressImageOnClient"
+              id="compressImage"
               type="radio"
               {...register("compressImage", { required: true })}
               value="compressImageOnClient"
               disabled={uploading}
               className={styles.checkbox}
             />
-            Compress image on client side
+            Compress image
           </label>
-          <label htmlFor="compressImageOnServer">
+          {/* <label htmlFor="compressImageOnServer">
             <input
               id="compressImageOnServer"
               type="radio"
@@ -305,7 +303,7 @@ const UploadNewImageForm = () => {
               className={styles.checkbox}
             />
             Compress image on server side
-          </label>
+          </label> */}
           <label htmlFor="noCompression">
             <input
               id="noCompression"

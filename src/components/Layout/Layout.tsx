@@ -23,10 +23,10 @@ const Header = () => {
       href: "/public-images",
       label: "Public Images",
     },
-    {
-      href: "/keyword-analysis",
-      label: "Keyword analysis",
-    },
+    // {
+    //   href: "/keyword-analysis",
+    //   label: "Keyword analysis",
+    // },
     {
       href: "/profile",
       label: "Profile",

@@ -12,11 +12,16 @@
 .peer-card {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 3rem;
   border-radius: 8px;
   /* background-color: red; */
   padding: 1.5rem 3rem;
   border: 3px solid #212121;
+}
+
+.peer-card-selected {
+  border-color: #4e4e4e;
 }
 
 .peer-card-content {
